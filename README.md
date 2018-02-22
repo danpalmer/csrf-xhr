@@ -1,6 +1,9 @@
 # csrf-xhr
 
-Automatically add Rails CSRF tokens into XMLHttpRequest headers.
+Automatically add CSRF tokens into XMLHttpRequest headers.
+
+Supports Rails CSRF tokens with zero configuration, and can support other frameworks
+with an extra meta tag.
 
 ## How to Use
 
@@ -15,6 +18,16 @@ contents of the `<meta name="csrf-token">` that [Rails generates in the page's
 
 [jQuery-ujs](https://github.com/rails/jquery-ujs) does this for you;
 this does it for you even if you aren't using jQuery.
+
+#### Overriding CSRF Header Name
+
+An extra meta tag can be added to change the name of the CSRF header. For example, 
+Django uses the name `X-CSRFToken` instead of Rails' `X-CSRF-Token`. Django can be
+supported by adding:
+
+```html
+<meta name="csrf-header-name" content="X-CSRFToken">
+```
 
 ## Motivation
 
