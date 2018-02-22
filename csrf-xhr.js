@@ -9,20 +9,24 @@
     // available, to ensure consistency across browsers.
     var origin = location.protocol + "//" + location.hostname + (location.port ? ':' + location.port: '');
 
-    var csrfTokenNode, csrfToken;
+    function getMetaContent(name) {
+        var metaNode;
 
-    try {
-      csrfTokenNode = document.head.querySelector('meta[name="csrf-token"]');
-    } catch (e){
-      // ignore document-based errors
-      csrfTokenNode = null;
-    }
+        try {
+            metaNode = document.head.querySelector('meta[name="' + name + '"]');
+        } catch (e){
+            // ignore document-based errors
+            metaNode = null;
+        }
 
-    if ((csrfTokenNode !== null) && (typeof csrfTokenNode.content === "string")) {
-      csrfToken = csrfTokenNode.content;
-    } else {
-      csrfToken = null;
+        if ((metaNode !== null) && (typeof metaNode.content === "string")) {
+            return metaNode.content;
+        }
+
+        return null;
     }
+    
+    var csrfToken = getMetaContent('csrf-token');
 
     // Patch XMLHttpRequest
     var originalOpen = xhr.open;
