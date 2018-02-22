@@ -27,6 +27,10 @@
     }
     
     var csrfToken = getMetaContent('csrf-token');
+    var csrfHeaderName = getMetaContent('csrf-header-name');
+    if (csrfHeaderName == null) {
+        csrfHeaderName = "X-CSRF-Token"; // Rails default
+    }
 
     // Patch XMLHttpRequest
     var originalOpen = xhr.open;
@@ -43,11 +47,11 @@
         var originalResult = originalOpen.apply(this, arguments);
 
         if (isLocalOrigin) {
-            // Set the X-CSRF-Token header, if possible.
+            // Set the token header, if possible.
             if (csrfToken === null) {
-                console.warn("csrf-xhr was unable to add a X-CSRF-Token header to a " + method + " to " + url + " because when csrf-xhr originally loaded, it could not find a <meta> element in the <head> with name=\"csrf-token\" and a Rails CSRF token in a content attribute.");
+                console.warn("csrf-xhr was unable to add a " + csrfHeaderName + " header to a " + method + " to " + url + " because when csrf-xhr originally loaded, it could not find a <meta> element in the <head> with name=\"csrf-token\" and a CSRF token in a content attribute.");
             } else {
-                this.setRequestHeader("X-CSRF-Token", csrfToken);
+                this.setRequestHeader(csrfHeaderName, csrfToken);
             }
         }
 
